@@ -8,5 +8,5 @@ export type Category = {
 export type SubCategory = {
   id: string;
   name: string;
-  productIds: number[];
+  productIds?: number[];
 };

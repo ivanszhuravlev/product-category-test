@@ -1,11 +1,12 @@
 import React from 'react';
-import styled from 'styled-components/native';
 import {useQuery} from 'react-query';
 import {CategoryApi} from '../models/Category/CategoryApi';
 import {LoaderFullscreen} from '../components/modules/LoaderFullscreen';
 import {MessageScreen} from '../components/modules/MessageScreen';
-import {Text} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import {COLORS} from '../constants/colors';
+import {CategoryTitle} from '../components/modules/CategoryTitle';
+import {SubcategoriesCarousel} from '../components/modules/SubcategoriesCarousel';
 
 interface Props {
   id: string;
@@ -27,13 +28,21 @@ export const CategoryDetailsScreen = ({id}: Props) => {
   }
 
   return (
-    <Container>
-      <Text>{data.name}</Text>
-    </Container>
+    <ScrollView contentContainerStyle={style.contentContainer}>
+      <CategoryTitle image={data.image} title={data.name} />
+      <SubcategoriesCarousel
+        categories={data.subCategories}
+        onChoose={() => {}}
+      />
+    </ScrollView>
   );
 };
 
-const Container = styled.View`
-  flex: 1;
-  background-color: ${COLORS.background};
-`;
+const style = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: 16,
+    justifyContent: 'flex-start',
+  },
+});

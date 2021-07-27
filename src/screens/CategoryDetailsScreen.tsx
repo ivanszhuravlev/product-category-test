@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useQuery} from 'react-query';
 import {CategoryApi} from '../models/Category/CategoryApi';
 import {LoaderFullscreen} from '../components/modules/LoaderFullscreen';
@@ -10,6 +10,7 @@ import {ProductsList} from '../components/modules/ProductsList';
 import {defaultSubCategory} from '../constants/subcategories';
 import styled from 'styled-components/native';
 import {Category} from '../models/Category/types';
+import {Animated} from 'react-native';
 
 interface Props {
   id: string;
@@ -35,22 +36,37 @@ export const CategoryDetailsScreen = ({id}: Props) => {
 
 const CategoryDetails = ({data}: {data: Category}) => {
   const [activeSubCat, setActiveSubCat] = useState(defaultSubCategory.id);
+  const titleHeight = useRef(new Animated.Value(200));
 
   const onChooseSubCategory = (_id: string) => {
     setActiveSubCat(_id);
   };
 
+  const onScroll = (offset: number) => {
+    if (offset <= 140) {
+      titleHeight.current.setValue(200 - offset);
+    }
+  };
+
+  const animatedStyle = {
+    height: titleHeight.current,
+  };
+
   return (
     <Container>
       <HeaderContainer>
-        <CategoryTitle image={data.image} title={data.name} />
+        <CategoryTitle
+          image={data.image}
+          title={data.name}
+          style={animatedStyle}
+        />
         <SubcategoriesCarousel
           categories={data.subCategories}
           onChoose={onChooseSubCategory}
           activeItem={activeSubCat}
         />
       </HeaderContainer>
-      <ProductsList subCategory={activeSubCat} />
+      <ProductsList subCategory={activeSubCat} onScroll={onScroll} />
     </Container>
   );
 };
@@ -60,7 +76,6 @@ const Container = styled.View`
   background-color: ${COLORS.background};
   padding: 16px;
 `;
-//justify-content: flex-start;
 
 const HeaderContainer = styled.View`
   margin-bottom: 12px;

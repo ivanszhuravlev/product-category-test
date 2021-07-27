@@ -1,6 +1,11 @@
 import React from 'react';
 import {Product} from '../../models/Product/types';
-import {FlatList, ListRenderItem} from 'react-native';
+import {
+  FlatList,
+  ListRenderItem,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from 'react-native';
 import {ProductItem} from '../ui/ProductItem';
 import {LoaderFullscreen} from './LoaderFullscreen';
 import {MessageScreen} from './MessageScreen';
@@ -9,11 +14,12 @@ import {ProductApi} from '../../models/Product/ProductApi';
 
 interface Props {
   subCategory: string;
+  onScroll: (offset: number) => void;
 }
 
 const apiProduct = new ProductApi();
 
-export const ProductsList = ({subCategory}: Props) => {
+export const ProductsList = ({subCategory, onScroll}: Props) => {
   const {isLoading, isError, data, error} = useQuery(
     ['products', subCategory],
     () => (subCategory ? apiProduct.list(subCategory) : apiProduct.listAll()),
@@ -24,6 +30,10 @@ export const ProductsList = ({subCategory}: Props) => {
   };
 
   const keyExtractor = (item: Product) => `${item.id}`;
+
+  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    return onScroll(e.nativeEvent.contentOffset.y);
+  };
 
   if (isLoading) {
     return <LoaderFullscreen />;
@@ -43,6 +53,9 @@ export const ProductsList = ({subCategory}: Props) => {
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       numColumns={2}
+      onScroll={handleScroll}
+      bounces={false}
+      scrollEventThrottle={16}
     />
   );
 };

@@ -2,24 +2,24 @@ import React from 'react';
 import styled from 'styled-components/native';
 import {H1} from '../ui/Text';
 import {COLORS} from '../../constants/colors';
+import {Animated, ViewProps} from 'react-native';
 
-interface Props {
+interface Props extends Animated.AnimatedProps<ViewProps> {
   image: string;
   title: string;
 }
 
-export const CategoryTitle = ({image, title}: Props) => {
+export const CategoryTitle = ({image, title, style}: Props) => {
   const source = {uri: image};
   return (
-    <Container>
+    <Container style={style}>
       <ImageStyled source={source} resizeMode={'cover'} />
       <Title>{title}</Title>
     </Container>
   );
 };
 
-const Container = styled.View`
-  height: 200px;
+const Container = styled(Animated.View)`
   border-radius: 12px;
   background-color: ${COLORS.black};
   align-items: center;

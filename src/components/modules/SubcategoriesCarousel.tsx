@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FlatList, ListRenderItem, StyleSheet} from 'react-native';
 import {SubCategory} from '../../models/Category/types';
 import {SubcategoryItem} from '../ui/SubcategoryItem';

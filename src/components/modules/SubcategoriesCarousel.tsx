@@ -37,6 +37,7 @@ export const SubcategoriesCarousel = ({
       keyExtractor={keyExtractor}
       contentContainerStyle={style.contentContainer}
       ItemSeparatorComponent={Separator}
+      showsHorizontalScrollIndicator={false}
     />
   );
 };

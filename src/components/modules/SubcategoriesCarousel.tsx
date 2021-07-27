@@ -8,28 +8,26 @@ import styled from 'styled-components/native';
 interface Props {
   categories: SubCategory[];
   onChoose: (id: string) => void;
+  activeItem: string;
 }
 
-export const SubcategoriesCarousel = ({categories, onChoose}: Props) => {
-  const [active, setActive] = useState(defaultSubCategory.id);
-
+export const SubcategoriesCarousel = ({
+  categories,
+  onChoose,
+  activeItem,
+}: Props) => {
   const data = [defaultSubCategory, ...categories];
-
-  const handleChoose = (id: string) => {
-    setActive(id);
-    return onChoose(id);
-  };
 
   const renderItem: ListRenderItem<SubCategory> = ({item}) => (
     <SubcategoryItem
       name={item.name}
       id={item.id}
-      onPress={handleChoose}
-      isActive={active === item.id}
+      onPress={onChoose}
+      isActive={activeItem === item.id}
     />
   );
 
-  const keyExtractor = (item: SubCategory) => item.id;
+  const keyExtractor = (item: SubCategory) => `subcat-${item.id}`;
 
   return (
     <FlatList

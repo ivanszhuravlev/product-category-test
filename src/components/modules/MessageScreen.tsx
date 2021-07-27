@@ -16,6 +16,7 @@ export const MessageScreen = ({message}: Props) => {
 
 const Container = styled.View`
   padding-horizontal: 24px;
+  flex: 1;
 `;
 
 const TextBaseStyled = styled(TextBase)`

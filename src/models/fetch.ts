@@ -27,4 +27,12 @@ const routesMap = [
     regexp: new RegExp(API_HOST + '/product/sub-categoryid=(.+)$'),
     getData: (match: string) => productsMock[match],
   },
+  {
+    regexp: new RegExp(API_HOST + '/product$'),
+    getData: () =>
+      Object.values(productsMock).reduce(
+        (result, item) => [...result, ...item],
+        [],
+      ),
+  },
 ];

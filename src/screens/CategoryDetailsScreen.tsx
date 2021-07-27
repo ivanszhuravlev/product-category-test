@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useQuery} from 'react-query';
 import {CategoryApi} from '../models/Category/CategoryApi';
 import {LoaderFullscreen} from '../components/modules/LoaderFullscreen';
 import {MessageScreen} from '../components/modules/MessageScreen';
-import {ScrollView, StyleSheet} from 'react-native';
 import {COLORS} from '../constants/colors';
 import {CategoryTitle} from '../components/modules/CategoryTitle';
 import {SubcategoriesCarousel} from '../components/modules/SubcategoriesCarousel';
+import {ProductsList} from '../components/modules/ProductsList';
+import {defaultSubCategory} from '../constants/subcategories';
+import styled from 'styled-components/native';
+import {Category} from '../models/Category/types';
 
 interface Props {
   id: string;
@@ -27,22 +30,38 @@ export const CategoryDetailsScreen = ({id}: Props) => {
     return <MessageScreen message={`${error}`} />;
   }
 
+  return <CategoryDetails data={data} />;
+};
+
+const CategoryDetails = ({data}: {data: Category}) => {
+  const [activeSubCat, setActiveSubCat] = useState(defaultSubCategory.id);
+
+  const onChooseSubCategory = (_id: string) => {
+    setActiveSubCat(_id);
+  };
+
   return (
-    <ScrollView contentContainerStyle={style.contentContainer}>
-      <CategoryTitle image={data.image} title={data.name} />
-      <SubcategoriesCarousel
-        categories={data.subCategories}
-        onChoose={() => {}}
-      />
-    </ScrollView>
+    <Container>
+      <HeaderContainer>
+        <CategoryTitle image={data.image} title={data.name} />
+        <SubcategoriesCarousel
+          categories={data.subCategories}
+          onChoose={onChooseSubCategory}
+          activeItem={activeSubCat}
+        />
+      </HeaderContainer>
+      <ProductsList subCategory={activeSubCat} />
+    </Container>
   );
 };
 
-const style = StyleSheet.create({
-  contentContainer: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    padding: 16,
-    justifyContent: 'flex-start',
-  },
-});
+const Container = styled.View`
+  flex: 1;
+  background-color: ${COLORS.background};
+  padding: 16px;
+`;
+//justify-content: flex-start;
+
+const HeaderContainer = styled.View`
+  margin-bottom: 12px;
+`;

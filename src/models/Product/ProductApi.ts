@@ -8,4 +8,8 @@ export class ProductApi extends Api {
       Product[]
     >;
   }
+
+  listAll() {
+    return fetchMock(this.endpoint('/product')) as Promise<Product[]>;
+  }
 }
